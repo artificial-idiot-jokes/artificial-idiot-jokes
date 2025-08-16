@@ -1,5 +1,13 @@
 [build]
-publish = "."
+  publish = "."
+  functions = "netlify/functions"
 
-[functions]
-node_bundler = "esbuild"
+[dev]
+  publish = "."
+  functions = "netlify/functions"
+
+# Optional: Redirect all routes to index.html (useful for SPAs)
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
