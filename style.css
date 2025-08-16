@@ -1,0 +1,14 @@
+*{box-sizing:border-box}body{margin:0;background:#0b0f14;color:#e6edf3;
+font:16px/1.6 system-ui, -apple-system, Segoe UI, Roboto, sans-serif}
+.wrap{max-width:720px;margin:40px auto;padding:0 16px}
+h1{margin:0 0 8px;font-size:32px}
+.sub{opacity:.8;margin:0 0 24px}
+.card{background:#11161d;border:1px solid #1f2a36;border-radius:12px;padding:16px}
+.tabs{display:flex;gap:16px;margin-bottom:12px}
+.tab{display:flex;align-items:center;gap:8px;opacity:.9}
+.row{display:flex;gap:12px}
+#topic{flex:1;padding:12px 14px;border-radius:10px;border:1px solid #243040;background:#0f141b;color:#e6edf3}
+#go{padding:12px 16px;border-radius:10px;border:1px solid #2b6cb0;background:#2b6cb0;color:#fff;font-weight:600}
+.out{background:#0b0f14;border:1px dashed #2b3b4d;border-radius:10px;padding:12px;min-height:96px;white-space:pre-wrap}
+.tip{opacity:.6;margin:8px 0 0}
+footer{opacity:.5;margin:16px 0}
