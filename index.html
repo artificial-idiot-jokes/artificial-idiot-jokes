@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Artificial Idiot — Jokes & Riddles</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🤖</text></svg>">
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <main class="wrap">
+    <header class="hero">
+      <div class="emoji">🤖</div>
+      <h1>Artificial Idiot</h1>
+      <p class="sub">Jokes & Riddles (offline backup — no API required)</p>
+    </header>
+
+    <section class="card">
+      <div class="tabs">
+        <button class="tab active" data-mode="riddle" id="tab-riddle">Riddles</button>
+        <button class="tab" data-mode="joke" id="tab-joke">Anti‑jokes</button>
+      </div>
+
+      <div class="controls">
+        <input id="topic" placeholder="Give me a topic (optional)…" />
+        <button id="generate">Generate</button>
+      </div>
+
+      <pre id="output" class="output" aria-live="polite"></pre>
+
+      <div class="footnote">
+        <span>Offline mode:</span> Content is served from a tiny local list while you sort API credits.
+      </div>
+    </section>
+
+    <footer class="footer">
+      © <span id="year"></span> Artificial Idiot — client‑only backup
+    </footer>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
