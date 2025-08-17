@@ -2,76 +2,74 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>🤖 Artificial Idiot — Jokes & Riddles</title>
-  <link rel="icon" href="favicon.svg">
-  <link rel="stylesheet" href="style.css">
-  <style>
-    body { max-width: 780px; margin: 2rem auto; padding: 0 1rem; font: 16px/1.5 system-ui, -apple-system, Segoe UI, Roboto, sans-serif; color:#e9eef3; background:#0c1117; }
-    .card { background:#111827; border:1px solid #233244; border-radius:12px; padding:1rem 1.25rem; }
-    .row { display:flex; gap:1rem; align-items:center; flex-wrap:wrap; }
-    textarea { width:100%; min-height:180px; border-radius:10px; padding:12px; border:1px solid #2a3b52; background:#0e1621; color:#e9eef3; }
-    button { border:0; padding:.75rem 1.1rem; border-radius:10px; background:#2276ff; color:white; font-weight:600; cursor:pointer; }
-    button:disabled { opacity:.6; cursor:progress; }
-    .muted { color:#9db0c0; font-size:.9rem; }
-    .tabs label { margin-right: 1rem; cursor:pointer; }
-    input[type="radio"] { transform: translateY(1px); }
-  </style>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Artificial Idiot — Jokes & Riddles</title>
+  <link rel="stylesheet" href="./style.css" />
 </head>
 <body>
-  <h1>🤖 Artificial Idiot</h1>
-  <p class="muted">Playful web experiments • <strong>Joke &amp; Riddle Bot</strong> (via OpenRouter)</p>
+  <main class="wrap">
+    <header class="hero">
+      <div class="emoji">🤖</div>
+      <h1>Artificial Idiot</h1>
+      <p class="tag">Jokes & Riddles (offline fallback)</p>
+    </header>
 
-  <div class="card">
-    <div class="tabs row" role="tablist" aria-label="Mode">
-      <label><input type="radio" name="mode" value="riddle" checked> Riddles</label>
-      <label><input type="radio" name="mode" value="anti"> Anti-jokes</label>
-    </div>
+    <section class="card">
+      <div class="toggle">
+        <label class="chip">
+          <input type="radio" name="mode" value="riddle" checked />
+          <span>Riddles</span>
+        </label>
+        <label class="chip">
+          <input type="radio" name="mode" value="joke" />
+          <span>Anti-jokes</span>
+        </label>
+      </div>
 
-    <div style="height:.6rem"></div>
+      <form id="form" class="controls">
+        <input id="topic" class="input" placeholder="Give me a topic (optional)…" />
+        <button class="btn" type="submit">Generate</button>
+      </form>
 
-    <div class="row">
-      <input id="topic" placeholder="Give me a topic (optional)…" style="flex:1; min-width:220px; padding:.65rem .8rem; border-radius:10px; border:1px solid #2a3b52; background:#0e1621; color:#e9eef3;">
-      <button id="go">Generate</button>
-    </div>
+      <pre id="out" class="output" aria-live="polite">Hit “Generate” to get started.</pre>
+      <p class="endpoint">Serving from <code>/public</code>. Serverless fallback not used.</p>
+    </section>
 
-    <div style="height:1rem"></div>
-
-    <textarea id="out" readonly placeholder="Your comedy gold will appear here…"></textarea>
-
-    <p class="muted">Tip: this is using <code>OPENROUTER_API_KEY</code> from Netlify env and the free model
-      <code>meta-llama/llama-3.1-8b-instruct:free</code>.</p>
-  </div>
+    <footer class="footer">
+      <small>© Artificial Idiot</small>
+    </footer>
+  </main>
 
   <script>
-    const btn = document.getElementById('go');
-    const out = document.getElementById('out');
-    const topic = document.getElementById('topic');
+    const riddles = [
+      "I speak without a mouth and hear without ears. What am I? An echo.",
+      "What has keys but can’t open locks? A piano.",
+      "What has a head and a tail but no body? A coin.",
+      "What can travel around the world while staying in a corner? A stamp."
+    ];
 
-    function modeValue() {
-      const el = document.querySelector('input[name="mode"]:checked');
-      return el ? el.value : "riddle";
-    }
+    const antiJokes = [
+      "Why did the scarecrow get promoted? He was standing in his field doing his job competently.",
+      "I told my wife she was drawing her eyebrows too high. She looked surprised because she intentionally drew them that way.",
+      "What’s orange and sounds like a parrot? A carrot. It doesn’t talk.",
+      "Why did the chicken cross the road? Because roads connect two places."
+    ];
 
-    btn.addEventListener('click', async () => {
-      btn.disabled = true;
-      out.value = "Thinking up something witty…";
-      try {
-        const res = await fetch('/.netlify/functions/jokebot', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            mode: modeValue() === 'anti' ? 'anti' : 'riddle',
-            topic: topic.value.trim()
-          })
-        });
-        const data = await res.json();
-        out.value = data.text || data.error || "Hmm, nothing came back.";
-      } catch (e) {
-        out.value = "Client error: " + e;
-      } finally {
-        btn.disabled = false;
-      }
+    const $ = sel => document.querySelector(sel);
+    const modeEls = document.querySelectorAll('input[name="mode"]');
+    const out = $('#out');
+    const topic = $('#topic');
+    const form = $('#form');
+
+    function pick(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
+
+    form.addEventListener('submit', e => {
+      e.preventDefault();
+      const mode = [...modeEls].find(m => m.checked).value;
+      const pool = mode === 'riddle' ? riddles : antiJokes;
+      const t = topic.value.trim();
+      const line = pick(pool);
+      out.textContent = t ? `${line} (topic: ${t})` : line;
     });
   </script>
 </body>
