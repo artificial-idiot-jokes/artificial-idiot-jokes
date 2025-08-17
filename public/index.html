@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>🤖 Artificial Idiot — Jokes & Riddles</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <main class="wrap">
+    <h1>🤖 Artificial Idiot</h1>
+    <p class="muted">Jokes &amp; Riddles via OpenRouter (serverless)</p>
+
+    <section class="card">
+      <div class="tabs">
+        <label><input type="radio" name="mode" value="riddle" checked> Riddles</label>
+        <label><input type="radio" name="mode" value="anti"> Anti-jokes</label>
+      </div>
+
+      <div class="controls">
+        <input id="topic" placeholder="Give me a topic (optional)…" />
+        <button id="go">Generate</button>
+      </div>
+
+      <pre id="out" class="output" aria-live="polite"></pre>
+    </section>
+  </main>
+
+  <script>
+    const out = document.getElementById('out');
+    const topic = document.getElementById('topic');
+    const go = document.getElementById('go');
+
+    function modeValue(){
+      const el = document.querySelector('input[name="mode"]:checked');
+      return el ? el.value : 'riddle';
+    }
+
+    async function run(){
+      go.disabled = true;
+      out.textContent = 'Thinking…';
+      try{
+        const res = await fetch('/.netlify/functions/jokebot', {
+          method: 'POST',
+          headers: {'Content-Type':'application/json'},
+          body: JSON.stringify({ mode: modeValue(), topic: topic.value.trim() })
+        });
+        const data = await res.json().catch(()=>({ text: 'Bad JSON from function' }));
+        out.textContent = data.text || data.content || data.error || '(no response)';
+      }catch(e){
+        out.textContent = 'Client error: ' + e;
+      }finally{
+        go.disabled = false;
+      }
+    }
+    go.addEventListener('click', run);
+    document.addEventListener('keydown', (e)=> (e.key === 'Enter') && run());
+  </script>
+</body>
+</html>
